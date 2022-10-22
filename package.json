@@ -11,6 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^1.5.2"
+    "astro": "^1.5.2",
+    "date-fns": "^2.29.3",
+    "puppeteer": "^19.1.0"
   }
 }

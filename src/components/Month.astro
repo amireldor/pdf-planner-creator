@@ -1,0 +1,79 @@
+---
+import * as dateFns from "date-fns";
+
+export interface Props {
+  month: number;
+  year: number;
+  big: boolean;
+}
+
+const { month, year, big } = Astro.props;
+
+const firstOfMonth = new Date(year, month, 1);
+const firstOfNextMonth = new Date(year, month + 1, 1);
+dateFns.getDay(firstOfMonth);
+---
+
+<div class:list={["month", { alt: month % 2 == 0, big }]}>
+  {
+    !big && (
+      <div class="header">
+        <h3 class="name">{dateFns.format(new Date(year, month), "MMMM")}</h3>
+      </div>
+    )
+  }
+  <div class="days">
+    {
+      Array.from({ length: dateFns.getISODay(firstOfMonth) }, (_) => (
+        <div class="day" />
+      ))
+    }
+    {
+      dateFns
+        .eachDayOfInterval({
+          start: firstOfMonth,
+          end: firstOfNextMonth,
+        })
+        .map((day) => (
+          <div class="day">
+            <div class="number">{dateFns.format(day, big ? "d iii" : "d")}</div>
+          </div>
+        ))
+    }
+  </div>
+</div>
+
+<style>
+  .month {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    padding: 4px 8px;
+    background: white;
+    font-size: 0.8rem;
+  }
+
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  :not(.big) .alt {
+    background: var(--alt);
+    -webkit-print-color-adjust: exact;
+  }
+
+  .name {
+    font-size: 14pt;
+    margin-bottom: 0;
+  }
+
+  .big .days {
+    border: 1px solid var(--alt);
+  }
+
+  .big .day {
+    height: 70px;
+    border: 1px solid var(--alt);
+  }
+</style>
