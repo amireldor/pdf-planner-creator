@@ -1,0 +1,43 @@
+---
+import * as dateFns from "date-fns";
+
+export interface Props {
+  date: Date;
+}
+
+const { date } = Astro.props;
+---
+
+<div class="day">
+  <header>
+    <h3>
+      <a href={`#month-${dateFns.format(date, "M")}`}
+        >{dateFns.format(date, "MMM")}</a
+      >
+      {dateFns.format(date, "dd - iii")}
+    </h3>
+  </header>
+  <div class="content">
+    <div class="main"><h4>Main Goals</h4></div>
+    <div class="lines">
+      <h4>Notes</h4>
+      {Array.from({ length: 20 }, (_, i) => <div class="line" />)}
+    </div>
+  </div>
+</div>
+
+<style>
+  .content {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+  }
+
+  .main {
+    float: right;
+  }
+
+  .line {
+    border-bottom: 1px solid black;
+    height: 24px;
+  }
+</style>

@@ -2,6 +2,7 @@
 import * as dateFns from "date-fns";
 import Layout from "../layouts/Layout.astro";
 import Month from "../components/Month.astro";
+import Day from "../components/Day.astro";
 
 const year = 2022;
 ---
@@ -14,7 +15,7 @@ const year = 2022;
     <div class="months">
       {
         Array.from({ length: 12 }, (_, month) => (
-          <a href={`#month-${month}`}>
+          <a href={`#month-${month + 1}`}>
             <Month big={false} year={year} month={month} />
           </a>
         ))
@@ -23,20 +24,33 @@ const year = 2022;
   </div>
 
   {
-    Array.from({ length: 12 }, (_, month) => (
-      <div class="page">
-        <a name={`month-${month}`} />
-        <h2>
-          <a name={`month-${month}`} />
-          <a href="#year">{year}</a>{" "}
-          {dateFns.format(new Date(year, month), "MMMM")}
-        </h2>
-        <div>
-          <h3>Projects:</h3>
-        </div>
-        <Month big year={year} month={month} />
-      </div>
-    ))
+    Array.from({ length: 12 }, (_, month) => {
+      return (
+        <>
+          <div class="page">
+            <a name={`month-${month + 1}`} />
+            <h2>
+              <a name={`month-${month + 1}`} />
+              <a href="#year">{year}</a>{" "}
+              {dateFns.format(new Date(year, month), "MMMM")}
+            </h2>
+            <div>
+              <h3>Projects:</h3>
+            </div>
+            <Month big year={year} month={month} />
+          </div>
+          {Array.from(
+            { length: dateFns.getDaysInMonth(new Date(year, month)) },
+            (_, day) => (
+              <div class="page">
+                <a name={`month-${month + 1}-day-${day + 1}`} />
+                <Day date={new Date(year, month, day + 1)} />
+              </div>
+            )
+          )}
+        </>
+      );
+    })
   }
 
   <div class="page">Goodbye :)</div>

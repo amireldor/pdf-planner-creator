@@ -10,7 +10,7 @@ export interface Props {
 const { month, year, big } = Astro.props;
 
 const firstOfMonth = new Date(year, month, 1);
-const firstOfNextMonth = new Date(year, month + 1, 1);
+const lastOfMonth = new Date(year, month + 1, 0);
 dateFns.getDay(firstOfMonth);
 ---
 
@@ -32,13 +32,24 @@ dateFns.getDay(firstOfMonth);
       dateFns
         .eachDayOfInterval({
           start: firstOfMonth,
-          end: firstOfNextMonth,
+          end: lastOfMonth,
         })
-        .map((day) => (
-          <div class="day">
-            <div class="number">{dateFns.format(day, big ? "d iii" : "d")}</div>
-          </div>
-        ))
+        .map((day) => {
+          const html = (
+            <div class="day">
+              <div class="number">
+                {dateFns.format(day, big ? "d iii" : "d")}
+              </div>
+            </div>
+          );
+          return big ? (
+            <a href={`#month-${month + 1}-day-${dateFns.format(day, "d")}`}>
+              {html}
+            </a>
+          ) : (
+            html
+          );
+        })
     }
   </div>
 </div>
