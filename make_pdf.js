@@ -14,7 +14,7 @@ import puppeteer from "puppeteer";
   };
 
   const pdfConfig = {
-    path: "planner-2022.pdf",
+    path: "planner.pdf",
     format: "A5",
     margin: margin,
   };
